@@ -1,0 +1,25 @@
+unit TreeUtils;
+
+interface
+
+function GetAllChildrenOfClass(obj: JSONVariant; classname: string): array of JSONVariant;
+
+implementation
+
+procedure InternalGetAllChildrenOfClass(obj: JSONVariant; classname: string; result: array of JSONVariant);
+begin
+   var theClassname: string := obj['$Class'];
+   if theClassname = '' then
+      exit;
+   if theClassname = classname then
+      result.add(obj);
+   for var i := 0 to obj['$Children'].length() do
+      InternalGetAllChildrenOfClass(obj['$Children'][i], classname, result);
+end;
+
+function GetAllChildrenOfClass(obj: JSONVariant; classname: string): array of JSONVariant;
+begin
+   InternalGetAllChildrenOfClass(obj, classname, result)
+end;
+
+end.
